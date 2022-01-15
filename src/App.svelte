@@ -1,15 +1,23 @@
 <script lang="ts">
   import Footer from "./components/Footer.svelte"
-
   import Header from "./components/Header.svelte"
+  import Tabs from "./shared/Tabs.svelte"
+
+  // tabs
+  let tabs = ["Current Polls", "Add New Poll"]
+  let activeTab = tabs[0]
+  const handleTabChange = (event: CustomEvent) => (activeTab = event.detail)
 </script>
 
 <Header />
 <main>
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, reprehenderit natus quam ut corrupti quos?
-    Esse, quia reprehenderit. In eos at dignissimos odit explicabo. Est hic eum amet itaque labore?
-  </p>
+  <Tabs {tabs} {activeTab} on:tabChange={handleTabChange} />
+  {#if activeTab === "Current Polls"}
+    <h2>Current Pools</h2>
+  {/if}
+  {#if activeTab === "Add New Poll"}
+    <h2>Add new Poll</h2>
+  {/if}
 </main>
 <Footer />
 
