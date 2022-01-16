@@ -1,20 +1,16 @@
 <script lang="ts">
+  import { PollStore } from "../stores/PollStore"
   import PollDetails from "./PollDetails.svelte"
 
-  type IPoll = {
-    question: string
-    answer1: string
-    answer2: string
-    votes1: number
-    votes2: number
-    id: number
-  }
-  export let polls: IPoll[] = []
+  // Alternative way to subscribe to a store if not using the $ syntax directly
+  // export let polls = []
+  // const unsubscribe = PollStore.subscribe((data) => (polls = data))
+  // onDestroy(() => unsubscribe())
 </script>
 
 <div class="poll-list">
-  {#each polls as poll (poll.id)}
-    <PollDetails {poll} on:vote />
+  {#each $PollStore as poll (poll.id)}
+    <PollDetails {poll} />
   {/each}
 </div>
 
