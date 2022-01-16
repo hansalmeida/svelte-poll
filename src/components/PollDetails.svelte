@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte"
+  import { tweened } from "svelte/motion"
   import Button from "../shared/Button.svelte"
 
   import Card from "../shared/Card.svelte"
@@ -16,8 +17,13 @@
   export let poll: IPoll
 
   $: totalVotes = poll.votes1 + poll.votes2
-  $: percentFirst = Math.floor((100 / totalVotes) * poll.votes1)
-  $: percentSecond = Math.floor((100 / totalVotes) * poll.votes2)
+  $: percentFirst = Math.floor((100 / totalVotes) * poll.votes1) || 0
+  $: percentSecond = Math.floor((100 / totalVotes) * poll.votes2) || 0
+
+  const tweenedPercentageFirst = tweened(0)
+  const tweenedPercentageSecond = tweened(0)
+  $: tweenedPercentageFirst.set(percentFirst)
+  $: tweenedPercentageSecond.set(percentSecond)
 
   const handleVote = (option: string, id: number) => {
     PollStore.update((currentPolls) => {
@@ -43,11 +49,11 @@
     <h3>{poll.question}</h3>
     <p>Total votes: {totalVotes}</p>
     <div class="answer" on:click={() => handleVote("1", poll.id)}>
-      <div class="percent percent-first" style="width: {percentFirst}%" />
+      <div class="percent percent-first" style="width: {$tweenedPercentageFirst}%" />
       <span>{poll.answer1} ({poll.votes1})</span>
     </div>
     <div class="answer" on:click={() => handleVote("2", poll.id)}>
-      <div class="percent percent-second" style="width: {percentSecond}%" />
+      <div class="percent percent-second" style="width: {$tweenedPercentageSecond}%" />
       <span>{poll.answer2} ({poll.votes2})</span>
     </div>
   </div>
