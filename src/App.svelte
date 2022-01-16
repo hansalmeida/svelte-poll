@@ -28,13 +28,24 @@
     activeTab = tabs[0]
     console.log(polls)
   }
+  const handleVote = (event: CustomEvent) => {
+    const { id, option } = event.detail
+
+    const copiedPolls = [...polls]
+    let upvotedPoll = copiedPolls.find((poll) => poll.id === id)
+
+    if (option === "1") upvotedPoll.votes1++
+    if (option === "2") upvotedPoll.votes2++
+
+    polls = copiedPolls
+  }
 </script>
 
 <Header />
 <main>
   <Tabs {tabs} {activeTab} on:tabChange={handleTabChange} />
   {#if activeTab === "Current Polls"}
-    <PollList {polls} />
+    <PollList {polls} on:vote={handleVote} />
   {/if}
   {#if activeTab === "Add New Poll"}
     <CreatePollForm on:addNewPoll={handleNewPoll} />
