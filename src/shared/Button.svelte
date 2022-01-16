@@ -5,7 +5,7 @@
   export let fit = false
 </script>
 
-<button class={type} class:fit class:flat class:inverse>
+<button class={type} class:fit class:flat class:inverse on:click>
   <slot />
 </button>
 
